@@ -15,7 +15,8 @@ var Order = mongoose.model('Order', {
     },
     customer_id: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     }
 });
 
