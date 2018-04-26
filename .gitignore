@@ -1,2 +1,5 @@
 node_modules
 playground
+public/orders/*
+
+!public/orders/.gitkeep
