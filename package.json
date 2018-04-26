@@ -1,0 +1,17 @@
+{
+  "name": "ccas",
+  "version": "1.0.0",
+  "description": "Automotive sales app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mockgoose": "^7.3.5",
+    "mongoose": "^5.0.16"
+  }
+}
