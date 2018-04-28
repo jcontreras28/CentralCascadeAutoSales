@@ -36,7 +36,7 @@ The placing of orders to the suppliers is actually achieved through a separate t
     server/serverACME.js
         routes:
             POST /order     Places order to suplier.  Expects object {api_key, model, package}
-                                api_key must be 'cascade.53bce4f1dfa0fe8e7ca126f91bs5d3a6'
+                                api_key must be 'cascade.53bce4f1dfa0fe8e7ca126f91b35d3a6'
                                 model must be one of (anvil, wile, roadrunner)
                                 package must be one of (std, super, elite)
 

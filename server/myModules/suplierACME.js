@@ -7,7 +7,7 @@ const {SuplierOrder} = require('../models/suplierOrder');
 class suplierACME {
 
     constructor() {
-        this.api_key = "cascade.53bce4f1dfa0fe8e7ca126f91bs5d3a6";
+        this.api_key = "cascade.53bce4f1dfa0fe8e7ca126f91b35d3a6";
         this.model = ["anvil", "wife", "roadrunner"];
         this.pack = ["std", "super", "elite"];
     }
