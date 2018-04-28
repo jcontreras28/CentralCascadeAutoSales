@@ -1,8 +1,8 @@
 # CentralCascadeAutoSales
 test backend for auto sales site
 
-##Main Central Cascades Automotive Sales server:  server/server.js
-    routes:
+## Main Central Cascades Automotive Sales server:  server/server.js
+    ### routes:
         ```GET /orders         lists all orders in database```
         ```POST /order         places an order expects object {make, model, package, customer_id}. Returns results and if successful, a link where                       the order can be downloaded.```
         ```GET /download/:id   allows downloading of json file id.json```
