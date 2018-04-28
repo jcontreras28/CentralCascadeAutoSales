@@ -1,55 +1,52 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var fs = require('fs');
+var schedule = require('node-schedule');
 
 var {mongoose} = require('./db/mongoose');
 var {Order} = require('./models/order');
+var {suplierACME} = require('./myModules/suplierACME');
+var {listAllJson, takeAndProcess, downloadOrderJson} = require('./controllers/orderController');
 
 var app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // for passing req and res values
 
-app.get('/orders', (req, res) => {
-    Order.find().then((orders) => {
-        res.send({orders});
-    }, (e) => {
-        res.status(400).send(e);
-    })
-});
 
-app.post('/order', (req, res) => {
 
-    var order = new Order({
-        make: req.body.make,
-        model: req.body.model,
-        package: req.body.package,
-        customer_id: req.body.customer_id
-    });
-    
-    // save order to db AND write a .json file to public/orders folder
-    order.save().then((doc) => {
-        fs.writeFile(__dirname + '/../public/orders/'+doc.customer_id+'.json', JSON.stringify(doc), (err) => {
-            if (err) {
-                return console.log("error saving file", err);
-            }
-            console.log("The file was saved!");
-        });
-        var downloadUrl = "localhost:3000/download/"+doc.customer_id;
-        reply = {
-            "results" : "success",
-            "downloadLink" : downloadUrl
-        }
-        res.send(reply);
-    }, (e) => {
-        res.status(400).send(e);
-    });    
-});
+app.get('/orders', listAllJson);
 
+app.post('/order', takeAndProcess);    
 
 // path to download order 
-app.get('/download/:id', function(req, res){
-    var file = __dirname + '/../public/orders/'+req.params.id+'.json';
-    res.download(file); // Set disposition and send it.
+app.get('/download/:id', downloadOrderJson);
+
+// sending orders to supliers via seperate task - that way if it fails due to server issue
+// it will have the chance to get placed again next time the task is ran.
+var j = schedule.scheduleJob('* * * * *', function(){
+
+  console.log('The answer to life, the universe, and everything!');
+
+    var acmesuplier = new suplierACME();
+
+    Order.find().then((orders) => {
+        console.log('here', orders);
+        orders.forEach((order)=> {
+            if (acmesuplier.havePackage(order)) {
+               
+                console.log('placing oder to acme');
+                acmesuplier.placeOrder(order);
+
+            } else {
+
+                console.log('acme cant fill order');
+
+            }
+        });
+        
+    }, (e) => {
+        return e;
+    });
+
 });
 
 

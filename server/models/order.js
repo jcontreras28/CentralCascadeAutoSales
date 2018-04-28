@@ -17,6 +17,14 @@ var Order = mongoose.model('Order', {
         type: Number,
         required: true,
         unique: true
+    },
+    order_placed_to_suplier: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    suplier_order_id: {
+        type: Number,
     }
 });
 
