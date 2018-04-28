@@ -15,8 +15,7 @@ var Order = mongoose.model('Order', {
     },
     customer_id: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     order_placed_to_suplier: {
         type: Boolean,

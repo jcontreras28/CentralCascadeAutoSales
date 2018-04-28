@@ -1,11 +1,11 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var schedule = require('node-schedule');
+const express = require('express');
+const bodyParser = require('body-parser');
+const schedule = require('node-schedule');
 
-var {mongoose} = require('./db/mongoose');
-var {Order} = require('./models/order');
-var {suplierACME} = require('./myModules/suplierACME');
-var {listAllJson, takeAndProcess, downloadOrderJson} = require('./controllers/orderController');
+const {mongoose} = require('./db/mongoose');
+
+const {Order} = require('./models/order');
+const {listAllJson, takeAndProcess, downloadOrderJson, checkForNewOrdersAndSendToSuplier} = require('./controllers/orderController');
 
 var app = express();
 
@@ -25,28 +25,9 @@ app.get('/download/:id', downloadOrderJson);
 // it will have the chance to get placed again next time the task is ran.
 var j = schedule.scheduleJob('* * * * *', function(){
 
-  console.log('I am aliiiiiiiiiiiiiive!  I am aliiiiiiiiiiiiiive!');
+    console.log('I am aliiiiiiiiiiiiiive!  I am aliiiiiiiiiiiiiive!');
 
-    var acmesuplier = new suplierACME();
-
-    Order.find({'order_placed_to_suplier': false}).then((orders) => {
-
-        orders.forEach((order)=> {
-            if (acmesuplier.havePackage(order)) {
-               
-                console.log('placing oder to acme');
-                acmesuplier.placeOrder(order);
-
-            } else {
-
-                console.log('acme cant fill order');
-
-            }
-        });
-        
-    }, (e) => {
-        return e;
-    });
+    checkForNewOrdersAndSendToSuplier();
 
 });
 

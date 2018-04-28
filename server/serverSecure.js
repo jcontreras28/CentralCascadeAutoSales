@@ -16,7 +16,7 @@ app.use(bodyParser.json()); // for passing req and res values
 
 
 
-app.get('/orders', listAllJson);
+app.get('/orders', authenticate, listAllJson);
 
 app.post('/order', takeAndProcess);    
 
@@ -46,40 +46,63 @@ app.post('/users/login', (req, res) => {
     }).catch((e) => {
         res.status(400).send();
     });
-})
-
-app.get('/users/me', authenticate, (req,res) => {
-    res.send(req.user);
 });
+
+app.delete('/users/me/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send
+    }, () => {
+        res.status(400).send();
+    });
+});
+
 
 // sending orders to supliers via seperate task - that way if it fails due to server issue
 // it will have the chance to get placed again next time the task is ran.
 var j = schedule.scheduleJob('* * * * *', function(){
 
-  console.log('heartbeat..');
-
-    var acmesuplier = new suplierACME();
-
-    Order.find({'order_placed_to_suplier': false}).then((orders) => {
-
-        orders.forEach((order)=> {
-            if (acmesuplier.havePackage(order)) {
-               
-                console.log('placing oder to acme');
-                acmesuplier.placeOrder(order);
-
-            } else {
-
-                console.log('acme cant fill order');
-
-            }
-        });
-        
-    }, (e) => {
-        return e;
-    });
-
-});
+    console.log('I am aliiiiiiiiiiiiiive!  I am aliiiiiiiiiiiiiive!');
+  
+      var acmesuplier = new suplierACME();
+      var rtssuplier = new suplierRTS();
+  
+      Order.find({'order_placed_to_suplier': false}).then((orders) => {
+  
+          console.log('Orders to place: ', orders.length);
+          orders.forEach((order)=> {
+              if (acmesuplier.havePackage(order)) {
+                 
+                  console.log('placing oder to acme');
+                  acmesuplier.placeOrder(order);
+  
+              } else if (rtssuplier.havePackage(order)){
+  
+                  console.log('placeing order to rts');
+                  rtssuplier.getOrderToken((error, tokenResults) => {
+                      if (error) {
+                          console.log("error from getOrderToken: ", error);
+                      } else {
+                          console.log("token: ",tokenResults);
+                          rtssuplier.placeOrder(order, tokenResults, (error, results) => {
+                              if (error) {
+                                  console.log("error from placeOrderrder: ", error);
+                              } else {
+                                  console.log("Order palced through rts.  Order Id is: ", results);
+                              }
+                          });
+                      }
+                  });
+  
+              } else {
+                  console.log('We have no supliers that carry that make/model');
+              }
+          });
+          
+      }, (e) => {
+          return e;
+      });
+  
+  });
 
 
 app.listen(3000, () => {

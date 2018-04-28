@@ -1,31 +1,42 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-var {mongoose} = require('./db/mongoose');
+const {mongoose} = require('./db/mongoose');
 
 const theSalt = 'thisismyamazingsaltprobshoudlusebcryptinstead';
 
 var app = express();
 
+var g_TokenArray = []; // prob need time stamp to make token only valid certain amount of time.
 
 app.use(bodyParser.json());
 
-app.post('/monce_token', (req, res) => {
-    var data = {
-        id: 100
+app.post('/nonce_token', (req, res) => {
+    var name = req.body.name;
+    if (name == 'ccas-bb9630c04f') {
+        var data = {
+            id: 100
+        }
+        var token = jwt.sign(data, theSalt);
+        g_TokenArray.push(token);
+        res.send({"nonce_token" : token});
+    } else {
+        res.status(401).send({"results" : "Incorrect name provided for request."});
     }
-    var token = jwt.sign(data, theSalt);
-    res.send({"monce_token" : token});
 });
 
 app.post('/request_customized_model', (req, res) => {
     
-    var decoded = jwt.verify(token, 'thisismyamazingsaltprobshoudlusebcryptinstead');
-    if (decoded) {
+    var index = g_TokenArray.indexOf(req.body.token);
+
+    if (index >= 0) {
+        g_TokenArray.splice(index, 1);
         var id = Date.now();
-        res.send({"order" : id});
+        res.send({"order_id" : id});
+    } else {
+        res.status(401).send({"results" : "Incorrect token provided for request."});
     }
    
 });
@@ -35,8 +46,8 @@ app.post('/', (req, res) => {
 });
 
 
-app.listen(3050, () => {
-    console.log('Started on port 3050');
+app.listen(3051, () => {
+    console.log('Started serverRTS on port 3051');
 });
 
 module.exports = {app};
