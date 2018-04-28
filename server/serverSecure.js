@@ -8,7 +8,7 @@ var {Order} = require('./models/order');
 var {User} = require('./models/user');
 var {authenticate} = require('./middleware/authenticate');
 var {suplierACME} = require('./myModules/suplierACME');
-var {listAllJson, takeAndProcess, downloadOrderJson} = require('./controllers/orderController');
+var {listAllJson, takeAndProcess, downloadOrderJson, checkForNewOrdersAndSendToSuplier} = require('./controllers/orderController');
 
 var app = express();
 
@@ -62,47 +62,10 @@ app.delete('/users/me/token', authenticate, (req, res) => {
 var j = schedule.scheduleJob('* * * * *', function(){
 
     console.log('I am aliiiiiiiiiiiiiive!  I am aliiiiiiiiiiiiiive!');
-  
-      var acmesuplier = new suplierACME();
-      var rtssuplier = new suplierRTS();
-  
-      Order.find({'order_placed_to_suplier': false}).then((orders) => {
-  
-          console.log('Orders to place: ', orders.length);
-          orders.forEach((order)=> {
-              if (acmesuplier.havePackage(order)) {
-                 
-                  console.log('placing oder to acme');
-                  acmesuplier.placeOrder(order);
-  
-              } else if (rtssuplier.havePackage(order)){
-  
-                  console.log('placeing order to rts');
-                  rtssuplier.getOrderToken((error, tokenResults) => {
-                      if (error) {
-                          console.log("error from getOrderToken: ", error);
-                      } else {
-                          console.log("token: ",tokenResults);
-                          rtssuplier.placeOrder(order, tokenResults, (error, results) => {
-                              if (error) {
-                                  console.log("error from placeOrderrder: ", error);
-                              } else {
-                                  console.log("Order palced through rts.  Order Id is: ", results);
-                              }
-                          });
-                      }
-                  });
-  
-              } else {
-                  console.log('We have no supliers that carry that make/model');
-              }
-          });
-          
-      }, (e) => {
-          return e;
-      });
-  
-  });
+
+    checkForNewOrdersAndSendToSuplier();
+
+});
 
 
 app.listen(3000, () => {
