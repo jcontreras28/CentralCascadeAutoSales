@@ -8,7 +8,7 @@ test backend for auto sales site
         GET /download/:id   allows downloading of json file id.json
 
 ## Secure Central Cascades Automotive Sales server: serverSecure.js
-    ### routes:
+    routes:
         GET /orders         lists all orders in database.  Must have x-auth token set to value from login or create user to view.
         POST /order         places an order expects object {make, model, package, customer_id}. Returns results and if successful, a link where                       the order can be downloaded.
         GET /download/:id   allows downloading of json file id.json
