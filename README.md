@@ -3,20 +3,20 @@ test backend for auto sales site
 
 ## Main Central Cascades Automotive Sales server:  server/server.js
     routes:
-        GET /orders         lists all orders in database
-        POST /order         places an order expects object {make, model, package, customer_id}. 
+        GET /orders         Lists all orders in database.
+        POST /order         Places an order expects object {make, model, package, customer_id}. 
                             Returns results and if successful, a link where the order can be downloaded.
-        GET /download/:id   allows downloading of json file id.json
+        GET /download/:id   Allows downloading of json file id.json.
 
 ## Secure Central Cascades Automotive Sales server: serverSecure.js
     routes:
-        GET /orders         lists all orders in database.  Must have x-auth token set to value from login or create user to view.
-        POST /order         places an order expects object {make, model, package, customer_id}. 
+        GET /orders         Lists all orders in database.  Must have x-auth token set to value from login or create user to view.
+        POST /order         Places an order expects object {make, model, package, customer_id}. 
                             Returns results and if successful, a link where the order can be downloaded.
-        GET /download/:id   allows downloading of json file id.json
-        POST /users         allows creation of user and returns token. Expects {email, password}
-        POST /users/login   validates password then creates token and returns it.  Expects {email, password}
-        DELETE /users/me/token removes users token (logs them out). Must have x-auth token in header set to call.
+        GET /download/:id   Allows downloading of json file id.json.
+        POST /users         Allows creation of user and returns token. Expects {email, password}
+        POST /users/login   Validates password then creates token and returns it.  Expects {email, password}
+        DELETE /users/me/token Removes users token (logs them out). Must have x-auth token in header set to call.
 
     test secure server: 
         To test this server, first create a user for yourself through POST to /users.  
@@ -34,16 +34,16 @@ The placing of orders to the suppliers is actually achieved through a separate t
         routes:
             POST /order     Places order to suplier.  Expects object {api_key, model, package}
                                 api_key must be 'cascade.53bce4f1dfa0fe8e7ca126f91bs5d3a6'
-                                model must be one of anvil, wile, roadrunner.
-                                package must be one of std, super, elite
+                                model must be one of (anvil, wile, roadrunner)
+                                package must be one of (std, super, elite)
 
     server/serverRTS.js
         routes:
             POST /nonce_token   Returns a one time user token to requestor in form of {nonce_token: token}
             POST/ /request_customized_model
                                 Checks token and places order if correct.  Expects {token, model, package}
-                                model must be one of pugetsound, olympic
-                                package must be one of mtn, ltd, 14k
+                                model must be one of (pugetsound, olympic)
+                                package must be one of (mtn, ltd, 14k)
 
 
 
