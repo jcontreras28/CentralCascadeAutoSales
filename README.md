@@ -10,6 +10,8 @@ test backend for auto sales site
 
 ## Secure Central Cascades Automotive Sales server: serverSecure.js
 I did an auth token and some middleware to restrict GET /orders to users with the auth token only. Another way to restrict could of been checking ips and only allowing computers from a specific location - the office location access to that site.  Just depends on how the customer would want to manage it.
+
+
     routes:
         GET /orders         Lists all orders in database.  Must have x-auth token set to value from login or create user to view.
         POST /order         Places an order expects object {make, model, package, customer_id}. 
