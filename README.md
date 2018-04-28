@@ -2,7 +2,7 @@
 test backend for auto sales site
 
 ## Main Central Cascades Automotive Sales server:  server/server.js
-    ### routes:
+    routes:
         GET /orders         lists all orders in database
         POST /order         places an order expects object {make, model, package, customer_id}. Returns results and if successful, a link where                       the order can be downloaded.
         GET /download/:id   allows downloading of json file id.json
@@ -16,7 +16,7 @@ test backend for auto sales site
         POST /users/login   validates password then creates token and returns it.  Expects {email, password}
         DELETE /users/me/token removes users token (logs them out). Must have x-auth token in header set to call.
 
-    ### test secure server: 
+    test secure server: 
         To test this server, first create a user for yourself through POST to /users.  Then grab the auth token returned in the header.  Use that token to put in the header as x-auth for any secured routes which are the GET /orders and DELETE /users/me/token
 
 ## Placing orders:
@@ -25,15 +25,15 @@ The placing of orders to the suppliers is actually achieved through a separate t
 
 ## Supplier servers:
 
-    ### server/serverACME.js
-        ### routes:
+    server/serverACME.js
+        routes:
             POST /order     Places order to suplier.  Expects object {api_key, model, package}
                                 api_key must be 'cascade.53bce4f1dfa0fe8e7ca126f91bs5d3a6'
                                 model must be one of anvil, wile, roadrunner.
                                 package must be one of std, super, elite
 
-    ### server/serverRTS.js
-        ### routes:
+    server/serverRTS.js
+        routes:
             POST /nonce_token   Returns a one time user token to requestor in form of {nonce_token: token}
             POST/ /request_customized_model
                                 Checks token and places order if correct.  Expects {token, model, package}
