@@ -17,7 +17,8 @@ test backend for auto sales site
         DELETE /users/me/token removes users token (logs them out). Must have x-auth token in header set to call.
 
     test secure server: 
-        To test this server, first create a user for yourself through POST to /users.  Then grab the auth token returned in the header.  Use that token to put in the header as x-auth for any secured routes which are the GET /orders and DELETE /users/me/token
+        To test this server, first create a user for yourself through POST to /users.  Then grab the auth token returned in the header.
+        Use that token to put in the header as x-auth for any secured routes which are the GET /orders and DELETE /users/me/token
 
 ## Placing orders:
 The placing of orders to the suppliers is actually achieved through a separate task.  When an order is placed, it is given a field of 'order_placed_to_suplier' that is set to false.  When the supplier order task is ran, it finds any orders in the database that have that flagged as false and then processes them.  If successful, it will then set it to true as well as setting a suplier_order_id field.
