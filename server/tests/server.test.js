@@ -29,7 +29,7 @@ beforeEach((done) => {
 describe('Regular Server Tests', function() {
 
     describe('POST /order', function() {
-        //this.timeout(10000);
+
         it('should create a new order', (done) => {
             var make = 'make';
             var model = 'anvil';

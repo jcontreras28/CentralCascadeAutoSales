@@ -9,7 +9,9 @@ var app = express();
 
 app.use(bodyParser.json());
 
+//************* Routes ****************/
 
+// place order
 app.post('/order', (req, res) => {
     
     // Use timestamp as id just to fake it here...  TODO - ad db to actually place suplier orders
@@ -17,11 +19,6 @@ app.post('/order', (req, res) => {
     res.send({"order" : id});
    
 });
-
-app.post('/', (req, res) => {
-    console.log('at root');
-});
-
 
 app.listen(3050, () => {
     console.log('Started on port 3050');

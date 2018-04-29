@@ -13,7 +13,11 @@ var g_TokenArray = []; // prob need time stamp to make token only valid certain 
 
 app.use(bodyParser.json());
 
+//************* Routes ****************/
+
+// return one time use token to requestor
 app.post('/nonce_token', (req, res) => {
+
     var name = req.body.name;
     if (name == 'ccas-bb9630c04f') {
         var data = {
@@ -25,8 +29,10 @@ app.post('/nonce_token', (req, res) => {
     } else {
         res.status(401).send({"results" : "Incorrect name provided for request."});
     }
+    
 });
 
+// place order
 app.post('/request_customized_model', (req, res) => {
     
     var index = g_TokenArray.indexOf(req.body.token);
@@ -41,13 +47,10 @@ app.post('/request_customized_model', (req, res) => {
    
 });
 
-app.post('/', (req, res) => {
-    console.log('at root');
-});
-
-
 app.listen(3051, () => {
+
     console.log('Started serverRTS on port 3051');
+
 });
 
 module.exports = {app};

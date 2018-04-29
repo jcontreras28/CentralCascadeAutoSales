@@ -68,7 +68,13 @@ module.exports.checkForNewOrdersAndSendToSuplier = function(req, res) {
             if (acmesuplier.havePackage(order)) {
                
                 console.log('placing oder to acme');
-                acmesuplier.placeOrder(order);
+                acmesuplier.placeOrder(order, (error, results) => {
+                    if (error) {
+                        console.log("error from placeOrder to ACME");
+                    } else {
+                        console.log("Order paced through rts.  Order Id is:  ", results);
+                    }
+                });
 
             } else if (rtssuplier.havePackage(order)){
 

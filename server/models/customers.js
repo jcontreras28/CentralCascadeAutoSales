@@ -1,3 +1,4 @@
+// Hardcoded customer data
 
 module.exports.customers = {
     1 : {

@@ -15,15 +15,20 @@ var app = express();
 app.use(bodyParser.json()); // for passing req and res values
 
 
+// ***********  Routes **********************
 
+// list orders
 app.get('/orders', authenticate, listAllJson);
 
+// place order
 app.post('/order', takeAndProcess);    
 
 // path to download order 
 app.get('/download/:id', downloadOrderJson);
 
+// create user
 app.post('/users', (req, res) => {
+
     var body = _.pick(req.body, ['email', 'password']);
     var user = new User(body);
 
@@ -33,10 +38,13 @@ app.post('/users', (req, res) => {
         res.header('x-auth', token).send(user);
     }).catch((e) => {
         res.status(400).send(e);
-    })
+    });
+
 });
 
+// login user
 app.post('/users/login', (req, res) => {
+
     var body = _.pick(req.body, ['email', 'password']);
     
     User.findByCredentials(body.email, body.password).then((user) => {
@@ -46,14 +54,18 @@ app.post('/users/login', (req, res) => {
     }).catch((e) => {
         res.status(400).send();
     });
+
 });
 
+// remove user token - logout
 app.delete('/users/me/token', authenticate, (req, res) => {
+
     req.user.removeToken(req.token).then(() => {
         res.status(200).send
     }, () => {
         res.status(400).send();
     });
+    
 });
 
 
@@ -69,7 +81,9 @@ var j = schedule.scheduleJob('* * * * *', function(){
 
 
 app.listen(3000, () => {
+
     console.log('Started on port 3000');
+
 });
 
 module.exports = {app};

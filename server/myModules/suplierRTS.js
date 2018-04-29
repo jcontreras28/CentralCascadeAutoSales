@@ -11,6 +11,7 @@ class suplierRTS {
         this.pack = ["mtn", "ltd", "14k"];
     }
 
+    // return one time use token to requester so they can place an order with it
     getOrderToken(callback){
        
         request
@@ -50,6 +51,7 @@ class suplierRTS {
             });
     }
 
+    // check if we have the package available before we can place the order
     havePackage(order) {
         var canFill = (this.pack.includes(order.package) && this.model.includes(order.model));
         console.log('canFill through RTS', canFill);

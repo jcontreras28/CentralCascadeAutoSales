@@ -12,9 +12,12 @@ var app = express();
 app.use(bodyParser.json()); // for passing req and res values
 
 
+// ***********  Routes **********************
 
+// List all orders as Json
 app.get('/orders', listAllJson);
 
+// Place order
 app.post('/order', takeAndProcess);    
 
 // path to download order 
@@ -33,7 +36,9 @@ var j = schedule.scheduleJob('* * * * *', function(){
 
 
 app.listen(3000, () => {
+
     console.log('Started on port 3000');
+
 });
 
 module.exports = {app};
