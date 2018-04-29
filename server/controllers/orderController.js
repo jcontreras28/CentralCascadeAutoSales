@@ -38,13 +38,13 @@ module.exports.takeAndProcess = function(req, res, next) {
         
         // save order to db AND write a .json file to public/orders folder
         order.save().then((doc) => {
-            fs.writeFile(__dirname + '/../../public/orders/'+doc.customer_id+'.json', JSON.stringify(doc), (err) => {
+            fs.writeFile(__dirname + '/../../public/orders/'+doc.id+'.json', JSON.stringify(doc), (err) => {
                 if (err) {
                     return console.log("error saving file", err);
                 }
                 //console.log("The file was saved!");
             });
-            var downloadUrl = "localhost:3000/download/"+doc.customer_id;
+            var downloadUrl = "localhost:3000/download/"+doc.id;
             reply = {
                 "results" : "success",
                 "downloadLink" : downloadUrl
