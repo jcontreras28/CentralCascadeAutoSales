@@ -1,6 +1,9 @@
 # CentralCascadeAutoSales
 test backend for auto sales site
 
+## To build/install
+    run: npm install
+    
 ## Main Central Cascades Automotive Sales server:  server/server.js
     routes:
         GET /orders         Lists all orders in database.
