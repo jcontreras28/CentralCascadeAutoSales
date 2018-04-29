@@ -1,0 +1,1 @@
+mocha --timeout 10000

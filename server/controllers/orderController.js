@@ -42,7 +42,7 @@ module.exports.takeAndProcess = function(req, res, next) {
                 if (err) {
                     return console.log("error saving file", err);
                 }
-                console.log("The file was saved!");
+                //console.log("The file was saved!");
             });
             var downloadUrl = "localhost:3000/download/"+doc.customer_id;
             reply = {
